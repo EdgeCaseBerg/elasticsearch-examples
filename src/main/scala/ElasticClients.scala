@@ -38,3 +38,18 @@ trait NodeClient extends ElasticClient {
 	val client: Client = node.client();
 }
 
+/** This is to illustrate how to start a local node and supply a client
+ *
+ *  You can mix this trait into other classes to provide a client to the
+ *  locally running node created by this trait.
+ *
+ *  @note it is the responsibility of the caller to node.close
+ */
+trait LocalNodeClient extends ElasticClient {
+	val node: Node = nodeBuilder()
+		.clusterName("elasticsearch")
+		.settings(Settings.settingsBuilder().put("http.enabled", false))
+		.local(true)
+		.node();
+	val client: Client = node.client();
+}
