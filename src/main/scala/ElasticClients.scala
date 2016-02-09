@@ -5,6 +5,7 @@ import org.elasticsearch.client.transport._
 import org.elasticsearch.common.settings.Settings
 import org.elasticsearch.common.transport._
 import java.net.{ InetAddress, InetSocketAddress }
+import java.util.UUID
 
 /** This is to illustrate how you can construct a Transport Client in ES 2.2.0
  *
@@ -19,6 +20,10 @@ trait TcpClient extends ElasticClient {
 
 	val client: Client = new TransportClient.Builder().settings(settings).build()
 		.addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName("localhost"), 9300))
+
+	def close {
+		client.close()
+	}
 }
 
 import org.elasticsearch.node._
@@ -33,9 +38,18 @@ import org.elasticsearch.node.NodeBuilder._
 trait NodeClient extends ElasticClient {
 	val node: Node = nodeBuilder()
 		.clusterName("elasticsearch")
+		.settings(Settings.settingsBuilder()
+			.put("http.enabled", false)
+			.put("path.home", "tmp/" + UUID.randomUUID())
+			.put("index.store.type", "memory"))
 		.client(true)
 		.node();
 	val client: Client = node.client();
+
+	def close {
+		client.close()
+		node.close()
+	}
 }
 
 /** This is to illustrate how to start a local node and supply a client
@@ -48,8 +62,16 @@ trait NodeClient extends ElasticClient {
 trait LocalNodeClient extends ElasticClient {
 	val node: Node = nodeBuilder()
 		.clusterName("elasticsearch")
-		.settings(Settings.settingsBuilder().put("http.enabled", false))
+		.settings(Settings.settingsBuilder()
+			.put("http.enabled", false)
+			.put("path.home", "tmp/" + UUID.randomUUID())
+			.put("index.store.type", "memory"))
 		.local(true)
 		.node();
 	val client: Client = node.client();
+
+	def close {
+		client.close()
+		node.close()
+	}
 }

@@ -6,6 +6,7 @@ import org.elasticsearch.index.query._
 /** Extend this trait and provide a configured client, then mix it into ElasticSearchService */
 trait ElasticClient {
 	val client: Client
+	def close: Unit
 }
 
 /** Helper Class to make our service interface a little bit easier */
