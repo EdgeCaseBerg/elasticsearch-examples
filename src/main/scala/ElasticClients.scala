@@ -20,3 +20,21 @@ trait TcpClient extends ElasticClient {
 	val client: Client = new TransportClient.Builder().settings(settings).build()
 		.addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName("localhost"), 9300))
 }
+
+import org.elasticsearch.node._
+import org.elasticsearch.node.NodeBuilder._
+
+/** This is to illustrate how you can construct a Nodeclient in ES 2.2.0
+ *
+ *  You can mix this trait into other classes to provide a client to ES
+ *
+ *  @note it is the responsibility of the caller to node.close
+ */
+trait NodeClient extends ElasticClient {
+	val node: Node = nodeBuilder()
+		.clusterName("elasticsearch")
+		.client(true)
+		.node();
+	val client: Client = node.client();
+}
+
