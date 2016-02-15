@@ -12,7 +12,7 @@ scalacOptions := Seq("-unchecked", "-deprecation", "-encoding", "utf8", "-featur
 
 libraryDependencies ++= Seq(
 		"org.elasticsearch" % "elasticsearch" % "2.2.0",
-		"org.scalatest" % "scalatest_2.10" % "2.0" % "test"
+		"org.scalatest" % "scalatest_2.11" % "2.2.6" % "test"
 	)
 
 scalariformPreferences := scalariformPreferences.value
