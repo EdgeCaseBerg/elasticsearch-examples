@@ -32,8 +32,8 @@ class ElasticSearchService {
 
 	/** Creates a match all request and returns the JSON string for it
 	 *
-	 * @param searchRequest The SearchRequest to be used in creating the query
-	 * @return Return's the string JSON for an ES query
+	 *  @param searchRequest The SearchRequest to be used in creating the query
+	 *  @return Return's the string JSON for an ES query
 	 */
 	def matchAll(searchRequest: SearchRequest) = {
 		val queryBuilder = client.prepareSearch(searchRequest.index)
