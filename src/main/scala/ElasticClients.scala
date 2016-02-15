@@ -18,7 +18,7 @@ trait TcpClient extends ElasticClient {
 		.put("cluster.name", "elasticsearch")
 		.build();
 
-	val client: Client = new TransportClient.Builder().settings(settings).build()
+	lazy val client: Client = new TransportClient.Builder().settings(settings).build()
 		.addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName("localhost"), 9300))
 
 	def close {
@@ -36,7 +36,7 @@ import org.elasticsearch.node.NodeBuilder._
  *  @note it is the responsibility of the caller to node.close
  */
 trait NodeClient extends ElasticClient {
-	val node: Node = nodeBuilder()
+	lazy val node: Node = nodeBuilder()
 		.clusterName("elasticsearch")
 		.settings(Settings.settingsBuilder()
 			.put("http.enabled", false)
@@ -44,7 +44,7 @@ trait NodeClient extends ElasticClient {
 			.put("index.store.type", "memory"))
 		.client(true)
 		.node();
-	val client: Client = node.client();
+	lazy val client: Client = node.client();
 
 	def close {
 		client.close()
@@ -60,7 +60,7 @@ trait NodeClient extends ElasticClient {
  *  @note it is the responsibility of the caller to node.close
  */
 trait LocalNodeClient extends ElasticClient {
-	val node: Node = nodeBuilder()
+	lazy val node: Node = nodeBuilder()
 		.clusterName("elasticsearch")
 		.settings(Settings.settingsBuilder()
 			.put("http.enabled", false)
@@ -68,7 +68,7 @@ trait LocalNodeClient extends ElasticClient {
 			.put("index.store.type", "memory"))
 		.local(true)
 		.node();
-	val client: Client = node.client();
+	lazy val client: Client = node.client();
 
 	def close {
 		client.close()
