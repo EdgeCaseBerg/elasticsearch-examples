@@ -6,4 +6,14 @@ object Queries {
     "match_all" : { }
   }
 }"""
+	val matchWord = """{
+  "query" : {
+    "match" : {
+      "_all" : {
+        "query" : "word",
+        "type" : "boolean"
+      }
+    }
+  }
+}"""
 }

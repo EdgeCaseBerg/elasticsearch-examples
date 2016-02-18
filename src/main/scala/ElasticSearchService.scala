@@ -44,4 +44,14 @@ class ElasticSearchService {
 		queryBuilder.setQuery(matchAll)
 		queryBuilder.toString
 	}
+
+	def matchKeyword(searchRequest: SearchRequest) = {
+		val queryBuilder = client.prepareSearch(searchRequest.index)
+		searchRequest.docType.map { docType =>
+			queryBuilder.setTypes(docType)
+		}
+		val matchWord = QueryBuilders.matchQuery("_all", searchRequest.keywords.getOrElse("*"))
+		queryBuilder.setQuery(matchWord)
+		queryBuilder.toString
+	}
 }

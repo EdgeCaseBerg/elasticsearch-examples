@@ -8,4 +8,9 @@ class ElasticSearchServiceTest extends ElasticTest {
 		val query = elasticSearchService.matchAll(SearchRequest("test"))
 		assertResult(Queries.matchAll)(query)
 	}
+
+	it should "create match keyword queries" in {
+		val query = elasticSearchService.matchKeyword(SearchRequest("test", keywords = Some("word")))
+		assertResult(Queries.matchWord)(query)
+	}
 }
