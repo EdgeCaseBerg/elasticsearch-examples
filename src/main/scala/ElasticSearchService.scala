@@ -45,6 +45,11 @@ class ElasticSearchService {
 		queryBuilder.toString
 	}
 
+	/** Creates a match keyword request and returns the JSON string for it
+	 *
+	 *  @param searchRequest The SearchRequest to be used in creating the query
+	 *  @return Return's the string JSON for an ES query
+	 */
 	def matchKeyword(searchRequest: SearchRequest) = {
 		val queryBuilder = client.prepareSearch(searchRequest.index)
 		searchRequest.docType.map { docType =>
@@ -53,5 +58,19 @@ class ElasticSearchService {
 		val matchWord = QueryBuilders.matchQuery("_all", searchRequest.keywords.getOrElse("*"))
 		queryBuilder.setQuery(matchWord)
 		queryBuilder.toString
+	}
+
+	/** Creates a query that will only return data that match the given categories
+	 *
+	 * @param categories A list of string tuples of field names to value to match
+	 * @return Return's the string JSON for an ES query
+	 */
+	def matchCategories(categories: List[Tuple2[String, String]]) = {
+		val andFilter = new BoolQueryBuilder()
+		categories.map {
+			case (field, value) =>
+				andFilter.must(new TermQueryBuilder(field, value))
+		}
+		andFilter.toString
 	}
 }

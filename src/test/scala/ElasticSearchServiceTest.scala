@@ -13,4 +13,10 @@ class ElasticSearchServiceTest extends ElasticTest {
 		val query = elasticSearchService.matchKeyword(SearchRequest("test", keywords = Some("word")))
 		assertResult(Queries.matchWord)(query)
 	}
+
+	it should "create a filtered category query" in {
+		val query = elasticSearchService.matchCategories(List(("myField", "test"), ("otherField", "value")))
+		assertResult(Queries.matchCategories)(query)
+	}
+
 }

@@ -1,12 +1,14 @@
 package com.github.edgecaseberg.elasticexamples
 
 object Queries {
-	val matchAll = """{
+	val matchAll =
+		"""{
   "query" : {
     "match_all" : { }
   }
 }"""
-	val matchWord = """{
+	val matchWord =
+		"""{
   "query" : {
     "match" : {
       "_all" : {
@@ -14,6 +16,20 @@ object Queries {
         "type" : "boolean"
       }
     }
+  }
+}"""
+	val matchCategories =
+		"""{
+  "bool" : {
+    "must" : [ {
+      "term" : {
+        "myField" : "test"
+      }
+    }, {
+      "term" : {
+        "otherField" : "value"
+      }
+    } ]
   }
 }"""
 }
